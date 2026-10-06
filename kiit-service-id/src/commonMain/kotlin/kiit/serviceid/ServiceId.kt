@@ -95,8 +95,8 @@ interface IServiceId {
 
     /**
      * How this instance came to exist. Not part of any derived identifier. Always
-     * [Provenance.Declared] for anything built through [ServiceId.of]; only a future parsing
-     * function sets [Provenance.Parsed].
+     * [Provenance.Declared] for anything built through [ServiceId.of]; only [ServiceId.parse]
+     * sets [Provenance.Parsed].
      */
     val provenance: Provenance
 }
@@ -306,9 +306,12 @@ data class ServiceId internal constructor(
 
         /**
          * Reconstructs a [ServiceId] from a [privateId] string. Strict: only the full 6-segment
-         * form is accepted; throws on a wrong segment count, an unrecognized [Kind], or a blank
-         * segment, naming exactly what was wrong, matching [of]/[with]'s style of rejecting bad
-         * input rather than silently swallowing it. Only the six chain fields come back —
+         * form is accepted; throws on a wrong segment count, an unrecognized [Kind], a blank
+         * segment, or an [origin]/[scope]/[env]/[version] with characters [normalize] would strip,
+         * naming exactly what was wrong, matching [of]/[with]'s style of rejecting bad input rather
+         * than silently swallowing it. [origin]/[scope]/[kind]/[env]/[version] are lowercased, so a
+         * parsed identity holds the same field values as one built with [of]; [instance] is left
+         * as given, same as [of]. Only the six chain fields come back —
          * [about]/[tags]/[uri]/[criticality]/[team] weren't part of [privateId] and get their
          * defaults. [provenance] is [Provenance.Parsed].
          *
@@ -320,18 +323,32 @@ data class ServiceId internal constructor(
                 "expected 6 segments (origin:scope:kind:env:version:instance), got ${segments.size}: '$raw'"
             }
 
-            val origin = segments[0]
-            val scope = segments[1]
             val kindSegment = segments[2]
-            val env = segments[3]
-            val version = segments[4]
             val instance = segments[5]
-            require(origin.isNotBlank() && scope.isNotBlank() && env.isNotBlank() && version.isNotBlank() && instance.isNotBlank()) {
+            require(segments.filterIndexed { i, _ -> i != 2 }.all { it.isNotBlank() }) {
                 "blank segment in '$raw'"
             }
 
+            // Lowercased like `of` does, then rejected, not rewritten, when `normalize` would have
+            // stripped anything else: untrusted header text doesn't silently change into something else.
+            fun clean(
+                name: String,
+                segment: String,
+            ): String {
+                val lowered = segment.lowercase()
+                require(lowered == lowered.normalize()) {
+                    "$name has characters that aren't allowed: '$segment' in '$raw'"
+                }
+                return lowered
+            }
+
+            val origin = clean("origin", segments[0])
+            val scope = clean("scope", segments[1])
+            val env = clean("env", segments[3])
+            val version = clean("version", segments[4])
+
             val kind =
-                Kind.entries.firstOrNull { it.name.lowercase() == kindSegment }
+                Kind.entries.firstOrNull { it.name.lowercase() == kindSegment.lowercase() }
                     ?: throw IllegalArgumentException("unrecognized kind '$kindSegment' in '$raw'")
             return ServiceId(
                 origin,

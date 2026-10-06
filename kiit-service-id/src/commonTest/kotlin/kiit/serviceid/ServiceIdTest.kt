@@ -299,4 +299,36 @@ class ServiceIdTest {
     fun parseRejectsABlankSegment() {
         assertFailsWith<IllegalArgumentException> { ServiceId.parse("acme::api:qat:1.0:i-1") }
     }
+
+    @Test
+    fun parseLowercasesTheChainFieldsLikeOfDoes() {
+        val parsed = ServiceId.parse("Acme:Accounts.Signup:API:QAT:1.4.2-RC1:Pod-7F")
+        val built = ServiceId.of("Acme", "Accounts.Signup", Kind.API, "QAT", version = "1.4.2-RC1", instance = "Pod-7F")
+
+        assertEquals(built.origin, parsed.origin)
+        assertEquals(built.scope, parsed.scope)
+        assertEquals(built.kind, parsed.kind)
+        assertEquals(built.env, parsed.env)
+        assertEquals(built.version, parsed.version)
+        assertEquals(built, parsed)
+    }
+
+    @Test
+    fun parseLeavesTheInstanceAsGiven() {
+        assertEquals("Pod-7F", ServiceId.parse("acme:s:api:qat:1.0:Pod-7F").instance)
+    }
+
+    @Test
+    fun parseRejectsCharactersOfWouldStrip() {
+        assertFailsWith<IllegalArgumentException> { ServiceId.parse("acme:accounts signup:api:qat:1.0:i-1") }
+        assertFailsWith<IllegalArgumentException> { ServiceId.parse("acme:accounts.signup!:api:qat:1.0:i-1") }
+        assertFailsWith<IllegalArgumentException> { ServiceId.parse("ac\u0000me:s:api:qat:1.0:i-1") }
+        assertFailsWith<IllegalArgumentException> { ServiceId.parse("acme:s:api:qat:1.0 beta:i-1") }
+    }
+
+    @Test
+    fun parseNamesTheSegmentThatWasRejected() {
+        val e = assertFailsWith<IllegalArgumentException> { ServiceId.parse("acme:bad scope:api:qat:1.0:i-1") }
+        assertTrue(e.message!!.startsWith("scope has characters"))
+    }
 }

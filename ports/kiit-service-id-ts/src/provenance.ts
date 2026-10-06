@@ -6,8 +6,8 @@
  *
  * Says nothing about whether the underlying values are truthful — a Parsed identity is honestly
  * labeled as unauthenticated, not verified as accurate. `ServiceId.of` never exposes this as an
- * option, so every identity built through it is Declared by construction; only a future parsing
- * function would produce Parsed. It reflects which code path actually built the object, not a
+ * option, so every identity built through it is Declared by construction; only
+ * `ServiceId.parse` produces Parsed. It reflects which code path actually built the object, not a
  * self-reported claim a caller can set.
  */
 export const Provenance = {

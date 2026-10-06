@@ -269,4 +269,38 @@ describe("ServiceId.parse", () => {
   it("rejects a blank segment", () => {
     expect(() => ServiceId.parse("acme::api:qat:1.0:i-1")).toThrow();
   });
+
+  it("lowercases the chain fields like of does", () => {
+    const parsed = ServiceId.parse("Acme:Accounts.Signup:API:QAT:1.4.2-RC1:Pod-7F");
+    const built = ServiceId.of({
+      origin: "Acme",
+      scope: "Accounts.Signup",
+      kind: Kind.API,
+      env: "QAT",
+      version: "1.4.2-RC1",
+      instance: "Pod-7F",
+    });
+
+    expect(parsed.origin).toBe(built.origin);
+    expect(parsed.scope).toBe(built.scope);
+    expect(parsed.kind).toBe(built.kind);
+    expect(parsed.env).toBe(built.env);
+    expect(parsed.version).toBe(built.version);
+    expect(parsed.equals(built)).toBe(true);
+  });
+
+  it("leaves the instance as given", () => {
+    expect(ServiceId.parse("acme:s:api:qat:1.0:Pod-7F").instance).toBe("Pod-7F");
+  });
+
+  it("rejects characters of would strip", () => {
+    expect(() => ServiceId.parse("acme:accounts signup:api:qat:1.0:i-1")).toThrow();
+    expect(() => ServiceId.parse("acme:accounts.signup!:api:qat:1.0:i-1")).toThrow();
+    expect(() => ServiceId.parse("ac\u0000me:s:api:qat:1.0:i-1")).toThrow();
+    expect(() => ServiceId.parse("acme:s:api:qat:1.0 beta:i-1")).toThrow();
+  });
+
+  it("names the segment that was rejected", () => {
+    expect(() => ServiceId.parse("acme:bad scope:api:qat:1.0:i-1")).toThrow(/^scope has characters/);
+  });
 });

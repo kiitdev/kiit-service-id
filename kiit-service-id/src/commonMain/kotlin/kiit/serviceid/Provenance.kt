@@ -9,8 +9,8 @@ package kiit.serviceid
  *
  * Says nothing about whether the underlying values are truthful — a [Parsed] identity is honestly
  * labeled as unauthenticated, not verified as accurate. [ServiceId.of] never exposes this as a
- * parameter, so every identity built through it is [Declared] by construction; only a future
- * parsing function would produce [Parsed], via the internal constructor. It reflects which code
+ * parameter, so every identity built through it is [Declared] by construction; only
+ * [ServiceId.parse] produces [Parsed], via the internal constructor. It reflects which code
  * path actually built the object, not a self-reported claim a caller can set.
  */
 enum class Provenance {

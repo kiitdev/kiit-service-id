@@ -117,7 +117,7 @@ This isn't enforced by the library. It's a convention, and the responsibility fo
 
 `ServiceId.env` is a plain `String`, not a typed enum. kiit-service-id has no dependency on the environment-selection module (`kiit-conf-envs`), since `ServiceId` is needed well beyond env-aware bootstrap code, so callers pass whatever env label they're already using.
 
-**Parsing.** `ServiceId.parse(raw)` reconstructs an identity from a `privateId` string (e.g. a `caller-id` header value), throwing `IllegalArgumentException` with the specific reason if it isn't well-formed. Only the six chain fields come back; `about`/`tags`/`uri`/`criticality`/`team` get their defaults, and `provenance` is `Parsed`.
+**Parsing.** `ServiceId.parse(raw)` reconstructs an identity from a `privateId` string (e.g. a `caller-id` header value), throwing `IllegalArgumentException` with the specific reason if it isn't well-formed. `origin`, `scope`, `kind`, `env` and `version` are lowercased, and a segment with characters `of` would strip (spaces, `!`, control characters) is rejected, not rewritten. `instance` is left as given. Only the six chain fields come back; `about`/`tags`/`uri`/`criticality`/`team` get their defaults, and `provenance` is `Parsed`.
 
 ```kotlin
 val id = ServiceId.parse(request.header("caller-id"))
