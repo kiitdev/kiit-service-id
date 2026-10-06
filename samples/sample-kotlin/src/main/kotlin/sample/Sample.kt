@@ -80,6 +80,16 @@ fun explanationExample() {
     verify("explanation-parse: provenance", parsed.provenance == Provenance.Parsed)
     verify("explanation-parse: defaults", parsed.tags.isEmpty() && parsed.team == "")
     verify("explanation-parse: equals the original", parsed == caller)
+
+    // <example id="explanation-security" tags="explanation">
+    val id = ServiceId.of("acme", "accounts.signup", Kind.API, "qat", version = "1.4.2", instance = "4a3b300b")
+
+    println(id.privateId) // acme:accounts.signup:api:qat:1.4.2:4a3b300b, for internal calls only
+    println(id.externalId) // acme:accounts.signup, safe to send outside
+    // </example>
+
+    verify("explanation-security: privateId", id.privateId == "acme:accounts.signup:api:qat:1.4.2:4a3b300b")
+    verify("explanation-security: externalId", id.externalId == "acme:accounts.signup")
 }
 
 /** Tutorial: create, copy, send, parse, and send the external form. */

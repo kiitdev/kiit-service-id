@@ -76,6 +76,23 @@ function explanationExample(): void {
   check("explanation-parse: provenance", parsed.provenance === Provenance.Parsed);
   check("explanation-parse: defaults", parsed.tags.length === 0 && parsed.team === "");
   check("explanation-parse: equals the original", parsed.equals(caller));
+
+  // <example id="explanation-security" tags="explanation">
+  const id = ServiceId.of({
+    origin: "acme",
+    scope: "accounts.signup",
+    kind: Kind.API,
+    env: "qat",
+    version: "1.4.2",
+    instance: "4a3b300b",
+  });
+
+  console.log(id.privateId); // acme:accounts.signup:api:qat:1.4.2:4a3b300b, for internal calls only
+  console.log(id.externalId); // acme:accounts.signup, safe to send outside
+  // </example>
+
+  check("explanation-security: privateId", id.privateId === "acme:accounts.signup:api:qat:1.4.2:4a3b300b");
+  check("explanation-security: externalId", id.externalId === "acme:accounts.signup");
 }
 
 /** Tutorial: create, copy, send, parse, and send the external form. */
