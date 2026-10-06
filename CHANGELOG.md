@@ -26,7 +26,7 @@ All notable changes to kiit-service-id are documented here. Format follows
 - `Criticality` (`Unspecified`/`Low`/`Medium`/`High`/`Critical`): how much it matters if this
   identity's owner fails or becomes unavailable. Mirrors OpenTelemetry's `service.criticality`
   resource attribute (confirmed Alpha stability in the OTel semantic conventions registry).
-- `Kind.Agent`, for AI agents. `Bot` stays for non-AI bots. `ServiceId.parse` accepts `agent` with no other change.
+- `Kind.Agent` (AI agents; `Bot` stays for non-AI bots), `Kind.Gateway` (API gateways and reverse proxies, the edge where `privateId` is replaced by `externalId`) and `Kind.Function` (serverless functions). `ServiceId.parse` accepts them with no other change.
 - `team`: the team or group that owns this service, distinct from `origin` (the owning company).
 - `Provenance` (`Declared`/`Parsed`): how a `ServiceId` instance came to exist — built locally via
   `of`, or reconstructed from a propagated string via `parse`. `of` never exposes this as a
