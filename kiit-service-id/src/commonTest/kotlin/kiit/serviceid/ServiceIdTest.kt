@@ -204,8 +204,14 @@ class ServiceIdTest {
         val base = ServiceId.of("c", "s", Kind.App, instance = "i-1")
         val other =
             ServiceId.of(
-                "c", "s", Kind.App, instance = "i-1",
-                about = "different", uri = "x", criticality = Criticality.Critical, team = "other-team",
+                "c",
+                "s",
+                Kind.App,
+                instance = "i-1",
+                about = "different",
+                uri = "x",
+                criticality = Criticality.Critical,
+                team = "other-team",
             )
 
         assertEquals(base, other)
