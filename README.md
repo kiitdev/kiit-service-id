@@ -103,7 +103,7 @@ This isn't enforced by the library. It's a convention, and the responsibility fo
 |---|---|
 | **`origin`** | Domain-like label for who owns this, e.g. `"acme.com"` or `"acme"`. Same convention as `Status.origin` in [kiit-codes](../kiit-codes). |
 | **`scope`** | Free-form, consumer-defined label for where in `origin` this lives, e.g. `"accounts.signup"`. Dots express hierarchy, same convention as `Status.scope`. |
-| **`Kind`** | What kind of runnable app or service has this identity: `App`, `CLI`, `Web`, `API`, `Bot`, `Job`, `Worker`, `Service`, `Test`. A closed set, a real enum, no runtime-extensible case. |
+| **`Kind`** | What kind of runnable app or service has this identity: `App`, `CLI`, `Web`, `API`, `Bot`, `Agent`, `Job`, `Worker`, `Service`, `Test`. A closed set, a real enum, no runtime-extensible case. |
 | **`about`** | Short, human-readable description of what this is or does. Not part of any derived accessor. |
 | **`tags`** | Labels attached to this identity: `Tag.Basic("retry")` or `Tag.Keyed("region", "us-east-1")`. `Tag.parse("region=us-east-1")` splits on the first `=`. Not part of any derived accessor, and not normalized — a tag's value often needs preserving exactly as given (a trace id, a hash), not canonicalized the way `origin`/`scope` are. |
 | **`uri`** | Optional reference to this instance itself (a hostname, a service-discovery address). Unique per environment, not part of any derived accessor. |

@@ -11,6 +11,10 @@ enum class Kind {
     Web,
     API,
     Bot,
+
+    /** An AI agent: software that acts on its own judgment, e.g. an LLM-driven assistant or tool-calling worker. */
+    Agent,
+
     Job,
     Worker,
     Service,

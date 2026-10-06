@@ -9,6 +9,7 @@ export const Kind = {
   Web: "Web",
   API: "API",
   Bot: "Bot",
+  Agent: "Agent",
   Job: "Job",
   Worker: "Worker",
   Service: "Service",

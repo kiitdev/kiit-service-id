@@ -109,7 +109,7 @@ tagged.tags;    // [{ variant: "Keyed", key: "region", value: "us-east-1", raw: 
 
 ## Kind
 
-`Kind` is `App`, `CLI`, `Web`, `API`, `Bot`, `Job`, `Worker`, `Service` or `Test`. It's an `as const` object with a matching union type, so `Kind.Job` and a `switch` over a `Kind` both type-check exhaustively.
+`Kind` is `App`, `CLI`, `Web`, `API`, `Bot`, `Agent`, `Job`, `Worker`, `Service` or `Test`. It's an `as const` object with a matching union type, so `Kind.Job` and a `switch` over a `Kind` both type-check exhaustively.
 
 ## Criticality
 
