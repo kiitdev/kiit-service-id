@@ -18,14 +18,28 @@ package kiit.serviceid
  * [Gateway] and [Function] exist and these don't.
  */
 enum class Kind {
+    /** A runnable application. Also covers mobile and desktop apps. */
     App,
+
+    /** A command line tool. */
     CLI,
+
+    /** A browser frontend. */
     Web,
+
+    /** An HTTP service. */
     API,
+
+    /** A bot that is not an AI agent. */
     Bot,
+
+    /** Scheduled or one-off work. */
     Job,
 
+    /** A queue or stream consumer, or a worker in a pool. */
     Worker,
+
+    /** A deployable service that doesn't fit another kind. */
     Service,
 
     /** An edge or routing service in front of others: an API gateway or reverse proxy. The point where internal identity stops and external identity starts. */
@@ -37,5 +51,6 @@ enum class Kind {
     /** An AI agent: software that acts on its own judgment, e.g. an LLM-driven assistant or tool-calling worker. */
     Agent,
 
+    /** A test identity. */
     Test,
 }

@@ -16,17 +16,40 @@
  * `Gateway` and `Function` exist and these don't.
  */
 export const Kind = {
+  /** A runnable application. Also covers mobile and desktop apps. */
   App: "App",
+
+  /** A command line tool. */
   CLI: "CLI",
+
+  /** A browser frontend. */
   Web: "Web",
+
+  /** An HTTP service. */
   API: "API",
+
+  /** A bot that is not an AI agent. */
   Bot: "Bot",
+
+  /** Scheduled or one-off work. */
   Job: "Job",
+
+  /** A queue or stream consumer, or a worker in a pool. */
   Worker: "Worker",
+
+  /** A deployable service that doesn't fit another kind. */
   Service: "Service",
+
+  /** An edge or routing service in front of others: an API gateway or reverse proxy. The point where internal identity stops and external identity starts. */
   Gateway: "Gateway",
+
+  /** A serverless function: short-lived, triggered per event or request. Many instances, each brief. */
   Function: "Function",
+
+  /** An AI agent: software that acts on its own judgment, e.g. an LLM-driven assistant or tool-calling worker. */
   Agent: "Agent",
+
+  /** A test identity. */
   Test: "Test",
 } as const;
 
